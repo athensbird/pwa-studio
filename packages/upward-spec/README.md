@@ -239,12 +239,12 @@ Progressive Web Apps represent a new plateau of maturity for the Web as a platfo
 
 Until PWAs, "web apps" have not been apps on their own; they could not function without a specific set of backing services. Those services should be decoupled and abstracted as [resource locators][twelve factor resources], so that individual servers can be swapped in and out, but the "frontend" is still tightly coupled to a specific topology of services, culminating in end-to-end functionality that depends on all of those services being present.
 
-![12-factor resource diagram: 12factor.net](http://localhost:8080/backing_services.png)
+![12-factor resource diagram: 12factor.net](backing_services.png)
 _Image courtesy of 12factor.net_
 
 A PWA must run independently from any backing services as much as possible; therefore, it must have alternate strategies to replace the functionality of each backing service. The simplest and most efficient PWA would have as few individual backing services as possible, so a need emerges for a tool which unifies backing services into a single layer that deliver, supports, and synchronizes with a PWA.
 
-![Unified graph over backing services](http://localhost:8080/unified_graph.png)
+![Unified graph over backing services](unified_graph.png)
 
 ### The Problem With PWA Runtime Dependencies
 
