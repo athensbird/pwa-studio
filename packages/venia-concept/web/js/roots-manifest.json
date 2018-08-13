@@ -1,0 +1,32 @@
+{
+    "CMS": {
+        "chunkName": "CMS-29f16cd620c95f43b313.js",
+        "rootChunkID": 2,
+        "rootModuleID": 34,
+        "type": "RootComponent",
+        "description": "Basic CMS Page",
+        "pageTypes": [
+            "CMS_PAGE"
+        ]
+    },
+    "Category": {
+        "chunkName": "Category-6b7b15c93612805bec47.js",
+        "rootChunkID": 1,
+        "rootModuleID": 35,
+        "type": "RootComponent",
+        "description": "Basic Category Page",
+        "pageTypes": [
+            "CATEGORY"
+        ]
+    },
+    "Product": {
+        "chunkName": "Product-78c0c73adfd60e0c6fc9.js",
+        "rootChunkID": 0,
+        "rootModuleID": 36,
+        "type": "RootComponent",
+        "description": "Basic Product Page",
+        "pageTypes": [
+            "PRODUCT"
+        ]
+    }
+}

@@ -1,0 +1,6 @@
+webpackJsonp([6],{641:
+/*!**********************************!*\
+  !*** ./src/reducers/checkout.js ***!
+  \**********************************/
+/*! dynamic exports provided */
+/*! all exports used */function(t,e,u){"use strict";Object.defineProperty(e,"__esModule",{value:!0}),e.selectCheckoutState=e.default=void 0;var a,s=u(/*! babel-runtime/helpers/extends */192),r=(a=s)&&a.__esModule?a:{default:a};var n={shippingInformation:!1,status:"READY",subflow:null};e.default=function(){var t=arguments.length>0&&void 0!==arguments[0]?arguments[0]:n,e=arguments[1],u=e.payload;switch(e.type){case"REQUEST_ORDER":return(0,r.default)({},t,{status:"REQUESTING"});case"RECEIVE_ORDER":return(0,r.default)({},t,{status:"MODIFYING"});case"ENTER_SUBFLOW":return(0,r.default)({},t,{status:"MODIFYING",subflow:u});case"EXIT_SUBFLOW":return(0,r.default)({},t,{status:"MODIFYING",subflow:null});case"SUBMIT_SHIPPING_INFORMATION":return(0,r.default)({},t,{shippingInformation:!0});case"SUBMIT_ORDER":return(0,r.default)({},t,{status:"SUBMITTING"});case"REJECT_ORDER":return(0,r.default)({},t,{status:"MODIFYING"});case"ACCEPT_ORDER":return(0,r.default)({},t,{status:"ACCEPTED"});case"RESET_CHECKOUT":return n;default:return t}},e.selectCheckoutState=function(t){return{checkout:t.checkout}}}});
