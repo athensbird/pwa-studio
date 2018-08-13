@@ -1,10 +1,10 @@
-# UPDOG Specification
+# UPWARD Specification
 
-**U**nified **P**WA **D**efinitions **O**f **G**raphs are simple files describing how a web server delivers a [Progressive Web Application][pwa def]. They specify server behavior in a platform-independent way, so that a PWA client application expecting a certain backend can be deployed on any type of tech stack that implements the UPDOG specification.
+**U**nified **P**WA **D**efinitions **O**f **G**raphs are simple files describing how a web server delivers a [Progressive Web Application][pwa def]. They specify server behavior in a platform-independent way, so that a PWA client application expecting a certain backend can be deployed on any type of tech stack that implements the UPWARD specification.
 
 ## Quickstart
 
-This repository is a test suite for UPDOG compliance, testing several scenarios and features on a live web server. It requires NodeJS v8 LTS or later. To test an UPDOG server:
+This repository is a test suite for UPWARD compliance, testing several scenarios and features on a live web server. It requires NodeJS v8 LTS or later. To test an UPWARD server:
 
 1. Install the `npx` utility to run global NPM commands:
 
@@ -14,20 +14,20 @@ This repository is a test suite for UPDOG compliance, testing several scenarios 
 
 2. Write or obtain a POSIX shell script which:
 
-   - gets the path to an `updog.yaml` file from the environment variable `UPDOG_YAML_PATH`
-   - launches and/or binds the UPDOG server under test and runs it in the foreground (not as a daemon process).
+   - gets the path to an `upward.yaml` file from the environment variable `UPWARD_YAML_PATH`
+   - launches and/or binds the UPWARD server under test and runs it in the foreground (not as a daemon process).
    - prints the hostname and port of the now-running server instance to standard out
    - responds to SIGTERM by gracefully closing the server
 
    [Example here.][spec-shell-script]
 
-3. Use `npx` to run `updog-spec` on your shell script
+3. Use `npx` to run `upward-spec` on your shell script
 
     ```sh
-    npx updog-spec ./test_my_updog.sh
+    npx upward-spec ./test_my_upward.sh
     ```
 
-4. The shell script will run for each test suite with the environment variable `UPDOG_YAML` set to the path of a fixture `updog.yaml` file for configuring a server instance. The script should launch a server (on a local port or a remote port, but resolvable to the local system) and print its host to standard out, staying in the foreground.
+4. The shell script will run for each test suite with the environment variable `UPWARD_YAML` set to the path of a fixture `upward.yaml` file for configuring a server instance. The script should launch a server (on a local port or a remote port, but resolvable to the local system) and print its host to standard out, staying in the foreground.
 
     The tests run in parallel. When each test suite is over, the script will receive a SIGTERM or SIGKILL.
 
@@ -35,13 +35,13 @@ This repository is a test suite for UPDOG compliance, testing several scenarios 
 
 ## Summary
 
-UPDOG files are XML, YAML or JSON files which declare the behavior of an [application shell] server. An application shell server implements a strict subset of HTTP functionality: it handles an HTTP GET request for a resource and delivers enough code and data to bootstrap a Progressive Web App which displays that resource.
+UPWARD files are XML, YAML or JSON files which declare the behavior of an [application shell] server. An application shell server implements a strict subset of HTTP functionality: it handles an HTTP GET request for a resource and delivers enough code and data to bootstrap a Progressive Web App which displays that resource.
 
-An App Shell is purposefully minimal, and so is an UPDOG server. It is meant to initialize or refresh sessions, deliver small HTML documents with enough server-side rendering for initial display and SEO, and then hand off subsequent request handling to the PWA running in the client.
+An App Shell is purposefully minimal, and so is an UPWARD server. It is meant to initialize or refresh sessions, deliver small HTML documents with enough server-side rendering for initial display and SEO, and then hand off subsequent request handling to the PWA running in the client.
 
-The declarative format of UPDOG means that an UPDOG-compliant server may be written in any programming language and run on any tech stack; therefore, a PWA can declare its own runtime network dependency by including an UPDOG file.
+The declarative format of UPWARD means that an UPWARD-compliant server may be written in any programming language and run on any tech stack; therefore, a PWA can declare its own runtime network dependency by including an UPWARD file.
 
-### Example `updog.yaml` which echoes request data
+### Example `upward.yaml` which echoes request data
 
 ```yaml
 root:
@@ -79,13 +79,13 @@ This trivial example describes a server which always returns status 200 with a s
 
 ### The configuration file
 
-A spec-compliant UPDOG server should be launchable with a single runtime parameter: the location of the `updog.yaml` file. The file may reference external resources using [Source Specifiers](#sourcespecifier), which should always be resolved to filesystem paths relative to the `updog.yaml` file. A simple, short template can be provided inline, but most of the time, a template should be specified with a Source Specifier.
+A spec-compliant UPWARD server should be launchable with a single runtime parameter: the location of the `upward.yaml` file. The file may reference external resources using [Source Specifiers](#sourcespecifier), which should always be resolved to filesystem paths relative to the `upward.yaml` file. A simple, short template can be provided inline, but most of the time, a template should be specified with a Source Specifier.
 
 ### The root responder
 
-**An `updog.yaml` file must contain a property `respond` at the top level.** (Other properties are allowed but ignored, to permit later expansion of the specification, and to allow for [YAML anchors][yaml anchors].).
+**An `upward.yaml` file must contain a property `respond` at the top level.** (Other properties are allowed but ignored, to permit later expansion of the specification, and to allow for [YAML anchors][yaml anchors].).
 
-The `respond` value must be an array of objects, often just a single object that represents the root of a decision tree. Each object is a [`ResponseLayer`](#responselayer) and the array of them is a [`ResponsePlan`](#responseplan). **The root `respond` must always eventually produce a context object with `status`, `headers`, and `body` properties.** Once the context satisfies this contract, it is coerced into an HTTP response and flushed to the client. No streaming or buffering interface should be provided; UPDOG servers should not deal in data of significant size.
+The `respond` value must be an array of objects, often just a single object that represents the root of a decision tree. Each object is a [`ResponseLayer`](#responselayer) and the array of them is a [`ResponsePlan`](#responseplan). **The root `respond` must always eventually produce a context object with `status`, `headers`, and `body` properties.** Once the context satisfies this contract, it is coerced into an HTTP response and flushed to the client. No streaming or buffering interface should be provided; UPWARD servers should not deal in data of significant size.
 
 ### ResponsePlan
 
@@ -122,7 +122,7 @@ A `ResponsePlan` is an ordered list set of `ResponseLayers` which build a contex
 
 For instance, in the above plan, the `when` ResponseLayer uses the `status` context value in its `match` configuration. It should not run until the `status` value has been assigned, so it runs second.
 
-All paths through such a tree must result in context objects with `status`, `headers`, and `body` properties. The expected behavior when a `ResponsePlan` ends without producing such a context is to immediately return a generic 500 error; the UPDOG server should never time out.
+All paths through such a tree must result in context objects with `status`, `headers`, and `body` properties. The expected behavior when a `ResponsePlan` ends without producing such a context is to immediately return a generic 500 error; the UPWARD server should never time out.
 
 ### ResponseLayer
 
@@ -254,7 +254,7 @@ However, duplication of logic is an antipattern, and the spreading of business l
 
 ### Edge Definition, Not Service Orchestration
 
-A common solution to the problem of business logic that exists across multiple services is [service orchestration][service orchestration], but a service orchestrator is a separate program with foreknowledge of the workflows that exist, and an imperative programming paradigm that enforces the workflows. UPDOG more closely resembles [service choreography][service choreography]
+A common solution to the problem of business logic that exists across multiple services is [service orchestration][service orchestration], but a service orchestrator is a separate program with foreknowledge of the workflows that exist, and an imperative programming paradigm that enforces the workflows. UPWARD more closely resembles [service choreography][service choreography]
 
 ![12-factor resource diagram: 12factor.net](http://localhost:8080/unified_graph.png)
 
@@ -291,7 +291,7 @@ Common objections to creating new specifications and standards include:
 - **Restrictiveness**: The standard imposes restrictions that hamper desired functionality
 - **Erosion risk**: Ensuring compliance with a standard's updates adds to the cost of software development and maintenance
 
-The UPDOG team shares those concerns, and applies them continuously to the standard as it develops. UPDOG exists because it answers these concerns with clear necessity, wise restrictiveness and limited scope.
+The UPWARD team shares those concerns, and applies them continuously to the standard as it develops. UPWARD exists because it answers these concerns with clear necessity, wise restrictiveness and limited scope.
 
 [application shell]: <https://developers.google.com/web/fundamentals/architecture/app-shell>
 [twelve factor]: <https://12factor.net/>
@@ -307,5 +307,5 @@ The UPDOG team shares those concerns, and applies them continuously to the stand
 [service orchestration]: <https://en.wikipedia.org/wiki/Orchestration_(computing)>
 [service choreography]: <https://en.wikipedia.org/wiki/Service_choreography>
 [npx]: <https://github.com/zkat/npx>
-[spec-shell-script]: <./test_my_updog.sh>
+[spec-shell-script]: <./test_my_upward.sh>
 [yaml anchors]: <https://learnxinyminutes.com/docs/yaml/>
